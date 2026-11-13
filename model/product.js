@@ -23,19 +23,31 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0
     },
-    stock: {
+    quantity: {
       type: Number,
       required: true,
       min: 0,
       default: 0
     },
-    description: {
+    reorderLevel: {
+      type: Number,
+      min: 0,
+      default: 10
+    },
+    supplier: {
       type: String,
       trim: true
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 );
 
-module.exports = mongoose.model('Product', productSchema);
+productSchema.virtual('stockValue').get(function () {
+  return this.price * this.quantity;
+});
 
+module.exports = mongoose.model('Product', productSchema);
