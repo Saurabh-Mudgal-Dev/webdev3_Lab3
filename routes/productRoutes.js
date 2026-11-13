@@ -7,13 +7,16 @@ const {
   updateProduct,
   deleteProduct
 } = require('../controller/productController');
+const {
+  validateProduct,
+  validateStockAdjustment
+} = require('../middleware/validate');
 
-router.post('/', createProduct);
+router.post('/', validateProduct, createProduct);
 router.get('/', getProducts);
 router.get('/:id', getProductById);
-router.put('/:id', updateProduct);
-router.patch('/:id', updateProduct);
+router.put('/:id', validateStockAdjustment, updateProduct);
+router.patch('/:id', validateStockAdjustment, updateProduct);
 router.delete('/:id', deleteProduct);
 
 module.exports = router;
-
